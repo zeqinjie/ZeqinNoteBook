@@ -15,7 +15,7 @@ author: " zhengzeqin "
 一.Homebrew安装  
 1.[安装终端输入:ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"](http://brew.sh/)
 2.进行检查brew是否已经安装成功: brew -v 
-
+3.sudo chown -R $(whoami):admin /usr/local   //報錯The /usr/local is not writable.
 二.Node.js安装
 
 1.安装curl : brew install curl 
