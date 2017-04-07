@@ -28,6 +28,7 @@ export NVM_DIR="/Users/zhengzeqin/.nvm" //文件目录
 
 3.安装Node.js:nvm install node && nvm alias default node
 【注意】如果现在采用是Node5.0版本的版本，官网是推荐安装npm 2，该版本比npm 3速度更加快。在安装完Node之后，命令行运行npm install  -g npm@2安装即可。
+https://segmentfault.com/a/1190000004404505
 
 4.安装watchmam，该用于监控bug文件:brew install watchman
 
