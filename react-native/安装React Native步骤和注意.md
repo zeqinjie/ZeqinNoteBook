@@ -33,7 +33,7 @@ https://segmentfault.com/a/1190000004404505
 4.安装watchmam，该用于监控bug文件:brew install watchman
 
 
-5.安装flow,flow是一个 JavaScript 的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误，官网:http://www.flowtype.org/
+5.安装flow,flow是一个 JavaScript 的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误:brew install flow。 http://www.flowtype.org/
 
 三.React Native安装
 npm install -g react-native-cli
@@ -49,3 +49,11 @@ npm config set loglevel=http
 查看版本
 npm -v
 
+
+备注:
+1.Homebrew : 软件管理工具
+2.watchmam :监控bug文件
+3.flow  : JavaScript 的静态类型检查器
+4.npm  :Node.js的包管理工具  
+5.nvm  :Node.js 管理工具 独立的
+6.rvm  :Ruby的管理工具
