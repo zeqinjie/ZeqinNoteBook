@@ -22,18 +22,19 @@ author: " zhengzeqin "
 2.安装nvm:curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
 
 重点：注意修改环境配置：
-在.nvm文件目录下找到（或者新建）.bash_profile 文件  添加下面
+在.nvm文件目录下找到（或者新建）.bash_profile 文件 添加下面
+
 export NVM_DIR="/Users/zhengzeqin/.nvm" //文件目录
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 
-3.安装Node.js:nvm install node && nvm alias default node
-【注意】如果现在采用是Node5.0版本的版本，官网是推荐安装npm 2，该版本比npm 3速度更加快。在安装完Node之后，命令行运行npm install  -g npm@2安装即可。
-https://segmentfault.com/a/1190000004404505
+[3.安装Node.js:nvm install node && nvm alias default node
+【注意】如果现在采用是Node5.0版本的版本，官网是推荐安装npm 2，该版本比npm 3速度更加快。在安装完Node之后，命令行运行npm install  -g npm@2安装即可。]
+(https://segmentfault.com/a/1190000004404505)
 
 4.安装watchmam，该用于监控bug文件:brew install watchman
 
 
-5.安装flow,flow是一个 JavaScript 的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误:brew install flow。 http://www.flowtype.org/
+[5.安装flow,flow是一个 JavaScript 的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误:brew install flow。] (http://www.flowtype.org/)
 
 三.React Native安装
 npm install -g react-native-cli
