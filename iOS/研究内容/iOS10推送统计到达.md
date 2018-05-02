@@ -15,7 +15,9 @@
 * UNNotificationServiceExtension 类 可以让开发者自定义推送展示的内容。你可以用 extension 修改推送内容和下载推送相关的资源。你可以在extension 中解密和加密的数据或下载推送相关的图片
 
 2.因此在这里可以提交到达的请求注意是这里处理时间只有30秒。为了不影响达到统计接口。一般会先发统计请求。同时通过缓存减少图片的请求。及图片的大小处理。
+
 ```objc
+
 @interface NotificationService ()<NSURLSessionDelegate>
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -178,5 +180,5 @@
 
 6.当然本人曾在低于iOS10版本通用过pod 'JDStatusBarNotification'库模仿一个推送通知栏
 
-7.测试发送iOS10的富文本推送低于iOS10版本的的用户只能收到title. subtitle内容是获取不到的。
+7.测试发现iOS10的富文本推送低于iOS10版本的的用户只能收到title. subtitle内容是获取不到的。同时返回字段是alert.因此是向下兼容的。
 
