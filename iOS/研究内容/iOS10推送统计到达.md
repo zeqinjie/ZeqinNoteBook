@@ -15,9 +15,7 @@
 * UNNotificationServiceExtension 类 可以让开发者自定义推送展示的内容。你可以用 extension 修改推送内容和下载推送相关的资源。你可以在extension 中解密和加密的数据或下载推送相关的图片
 
 2.因此在这里可以提交到达的请求注意是这里处理时间只有30秒。为了不影响达到统计接口。一般会先发统计请求。同时通过缓存减少图片的请求。及图片的大小处理。
-
 ```objc
-
 @interface NotificationService ()<NSURLSessionDelegate>
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -28,87 +26,87 @@
 @implementation NotificationService
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
-    
-    self.contentHandler = contentHandler;
-    self.bestAttemptContent = [request.content mutableCopy];
-    NSDictionary *userInfo = request.content.userInfo;
-    
-    NSString *iconUrl = userInfo[[self fcmPushStrFromStr:@"small_image"]];//小图
-    NSString *imageUrl = userInfo[[self fcmPushStrFromStr:@"image"]];//大图
-    
-    //重点这里发送给后端到达统计
-    [ProfessionTool sendFcmPushStatUserInfo:userInfo];//统计到达数
-    
-    //这里是处理富文本图片 ，媒体视频等
-    UNNotificationAttachment *iconAtt = [self attachmentWithUrl:iconUrl fileName:@"small_image"];//待优化缓存方式
-    UNNotificationAttachment *imageAtt = [self attachmentWithUrl:imageUrl fileName:@"image"];
-    NSMutableArray *attArr = [NSMutableArray array];
-    if (iconAtt) [attArr addObject:iconAtt];
-    if (imageAtt) [attArr addObject:imageAtt];
-    self.bestAttemptContent.attachments = attArr;
-    self.contentHandler(self.bestAttemptContent);
+
+self.contentHandler = contentHandler;
+self.bestAttemptContent = [request.content mutableCopy];
+NSDictionary *userInfo = request.content.userInfo;
+
+NSString *iconUrl = userInfo[[self fcmPushStrFromStr:@"small_image"]];//小图
+NSString *imageUrl = userInfo[[self fcmPushStrFromStr:@"image"]];//大图
+
+//重点这里发送给后端到达统计
+[ProfessionTool sendFcmPushStatUserInfo:userInfo];//统计到达数
+
+//这里是处理富文本图片 ，媒体视频等
+UNNotificationAttachment *iconAtt = [self attachmentWithUrl:iconUrl fileName:@"small_image"];//待优化缓存方式
+UNNotificationAttachment *imageAtt = [self attachmentWithUrl:imageUrl fileName:@"image"];
+NSMutableArray *attArr = [NSMutableArray array];
+if (iconAtt) [attArr addObject:iconAtt];
+if (imageAtt) [attArr addObject:imageAtt];
+self.bestAttemptContent.attachments = attArr;
+self.contentHandler(self.bestAttemptContent);
 
 }
 
 - (UNNotificationAttachment *)attachmentWithUrl:(NSString *)url fileName:(NSString *)fileName{
-    if (url) {
-        UIImage *iconImg = [self getImageFromURL:url];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectoryPath = [paths firstObject];
-        NSString *iconPath = [self saveImage:iconImg withFileName:fileName ofType:@"png" inDirectory:documentsDirectoryPath];
-        if (iconPath && ![iconPath isEqualToString:@""]) {
-            UNNotificationAttachment * attachment = [UNNotificationAttachment attachmentWithIdentifier:fileName URL:[NSURL URLWithString:[@"file://" stringByAppendingString:iconPath]] options:nil error:nil];
-            if (attachment) {
-                return attachment;
-            }
-        }
-    }
-    return nil;
+if (url) {
+UIImage *iconImg = [self getImageFromURL:url];
+NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+NSString *documentsDirectoryPath = [paths firstObject];
+NSString *iconPath = [self saveImage:iconImg withFileName:fileName ofType:@"png" inDirectory:documentsDirectoryPath];
+if (iconPath && ![iconPath isEqualToString:@""]) {
+UNNotificationAttachment * attachment = [UNNotificationAttachment attachmentWithIdentifier:fileName URL:[NSURL URLWithString:[@"file://" stringByAppendingString:iconPath]] options:nil error:nil];
+if (attachment) {
+return attachment;
+}
+}
+}
+return nil;
 }
 
 - (void)serviceExtensionTimeWillExpire {
-    // Called just before the extension will be terminated by the system.
-    // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-    self.contentHandler(self.bestAttemptContent);
+// Called just before the extension will be terminated by the system.
+// Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
+self.contentHandler(self.bestAttemptContent);
 }
 
 #pragma mark - private Method
 - (UIImage *)getImageFromURL:(NSString *)fileURL {
-    DLog(@"执行图片下载函数");
-    UIImage * result;
-    //dataWithContentsOfURL方法需要https连接
-    NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
-    result = [UIImage imageWithData:data];
-    
-    return result;
+DLog(@"执行图片下载函数");
+UIImage * result;
+//dataWithContentsOfURL方法需要https连接
+NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
+result = [UIImage imageWithData:data];
+
+return result;
 }
 
 //将所下载的图片保存到本地
 - (NSString *)saveImage:(UIImage *)image withFileName:(NSString *)imageName ofType:(NSString *)extension inDirectory:(NSString *)directoryPath {
-    NSString *urlStr = @"";
-    if ([[extension lowercaseString] isEqualToString:@"png"]){
-        urlStr = [directoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", imageName, @"png"]];
-        [UIImagePNGRepresentation(image) writeToFile:urlStr options:NSAtomicWrite error:nil];
-        
-    } else if ([[extension lowercaseString] isEqualToString:@"jpg"] ||
-               [[extension lowercaseString] isEqualToString:@"jpeg"]){
-        urlStr = [directoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", imageName, @"jpg"]];
-        [UIImageJPEGRepresentation(image, 1.0) writeToFile:urlStr options:NSAtomicWrite error:nil];
-        
-    } else{
-        DLog(@"extension error");
-    }
-    return urlStr;
+NSString *urlStr = @"";
+if ([[extension lowercaseString] isEqualToString:@"png"]){
+urlStr = [directoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", imageName, @"png"]];
+[UIImagePNGRepresentation(image) writeToFile:urlStr options:NSAtomicWrite error:nil];
+
+} else if ([[extension lowercaseString] isEqualToString:@"jpg"] ||
+[[extension lowercaseString] isEqualToString:@"jpeg"]){
+urlStr = [directoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", imageName, @"jpg"]];
+[UIImageJPEGRepresentation(image, 1.0) writeToFile:urlStr options:NSAtomicWrite error:nil];
+
+} else{
+DLog(@"extension error");
+}
+return urlStr;
 }
 
 //因项目中使用google 的FCM推送收到的推送字段有点不一样
 - (NSString *)fcmPushStrFromStr:(NSString *)str{
-    NSString *resultStr = str;
-    NSString *fcmPre = @"gcm.notification.";
-    if (![resultStr containsString:fcmPre]) {
-        resultStr = [NSString stringWithFormat:@"%@%@",fcmPre,resultStr];
-    }
-    return resultStr;
+NSString *resultStr = str;
+NSString *fcmPre = @"gcm.notification.";
+if (![resultStr containsString:fcmPre]) {
+resultStr = [NSString stringWithFormat:@"%@%@",fcmPre,resultStr];
+}
+return resultStr;
 }
 ```
 3.服务端配置内容需要添加"mutable-content":1 （富文本推送）
@@ -125,23 +123,23 @@
 //iOS10 之前
 {
 "aps" : {
-    "alert" : "title",
-    "badge" : 1,
-    "sound":"default"
-        },
+"alert" : "title",
+"badge" : 1,
+"sound":"default"
+},
 }
 
 //iOS10 新增的文案多样性
 {
 "aps" : {
-    "alert" : { 
-         "title" : "title", 
-         "subtitle" : "subtitle",         
-         "body" : "body"
-                },
-    "badge" : 1,
-    "sound":"default"
-        },
+"alert" : { 
+"title" : "title", 
+"subtitle" : "subtitle",         
+"body" : "body"
+},
+"badge" : 1,
+"sound":"default"
+},
 }
 
 ```
@@ -152,12 +150,12 @@
 
 //NS_AVAILABLE_IOS(3_0)
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    //最开始的接收推送回调
+//最开始的接收推送回调
 }
 
 //NS_AVAILABLE_IOS(7_0)
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    //这里亦可接收静默推送回调   
+//这里亦可接收静默推送回调   
 }
 
 //iOS10之后统一 
@@ -165,13 +163,13 @@
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification*)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
 
-   completionHandler(UNNotificationPresentationOptionAlert);
+completionHandler(UNNotificationPresentationOptionAlert);
 
 }
 
 //点击通知进入App
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    
+
 }
 
 ```
@@ -180,5 +178,7 @@
 
 6.当然本人曾在低于iOS10版本通用过pod 'JDStatusBarNotification'库模仿一个推送通知栏
 
-7.测试发现iOS10的富文本推送低于iOS10版本的的用户只能收到title. subtitle内容是获取不到的。同时返回字段是alert.因此是向下兼容的。
+7.测试发送iOS10的富文本推送低于iOS10版本的的用户只能收到title. subtitle内容是获取不到的。
 
+
+8.Target的调试 将项目运行起来，然后发送一条推送之后，激活Service Extension，在XCode -DEBUG下Attach to Process 选择对于的target
