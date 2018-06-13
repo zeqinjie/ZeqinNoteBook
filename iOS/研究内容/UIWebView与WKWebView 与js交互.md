@@ -283,3 +283,5 @@ typedef void(^JumpToAppBlock)(NSDictionary *json);
 
 ```
 
+- WKWebview的js与客户端交互回调函数didReceiveScriptMessage 是在主线程中
+- UIWebview的js与客户端的回调函数是实现JSExport协议的方法是在子线程中所以不是线程安全
