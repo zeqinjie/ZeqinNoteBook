@@ -139,7 +139,7 @@ func DLog(str: String) {
 > 1. [插件安装AppStore下载地址](https://itunes.apple.com/cn/app/swiftify-objective-c-converter-for-xcode/id1183412116?mt=12)
 > 2. [在线转换地址](https://objectivec2swift.com/#/home)
 
-![image](https://user-gold-cdn.xitu.io/2018/9/10/165c32b74e59371b?w=1200&h=706&f=png&s=66945)
+![image](https://user-gold-cdn.xitu.io/2018/9/10/165c32b75fe7404e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 ### 快速将json转化为Swift的模型对象
