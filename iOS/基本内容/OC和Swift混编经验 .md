@@ -149,6 +149,11 @@ func DLog(str: String) {
 
 ![image](https://note.youdao.com/yws/public/resource/3885b57559fa21e13d008c690c9d564b/xmlnote/WEBRESOURCEd17dbac544ffdaf6af4ba835597d899c/6435)
 
+### 通过R.swift快速生成资源代码
+根据项目内容来自动化生 ImageName 和 SegueName代码 可以使用Switf的自动化工具了，[R.swift](https://user-gold-cdn.xitu.io/2018/9/11/165c757e91bf81e0) 和 [SwiftGen](https://github.com/SwiftGen/SwiftGen)
+```
+let image = UIImage(imageName: .imgIcon)
+```
 
 
 ## 推荐
