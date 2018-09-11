@@ -155,6 +155,10 @@ func DLog(str: String) {
 let image = UIImage(imageName: .imgIcon)
 ```
 
+### Swift 测试速度
+- [Swift 与 Object-C的速度测试对比](https://www.jessesquires.com/blog/apples-to-apples-part-two/)
+- [Swift 与 C的速度测试对比](https://www.jessesquires.com/blog/apples-to-apples-part-three/)
+
 
 ## 推荐
 > Swift学习文档：
